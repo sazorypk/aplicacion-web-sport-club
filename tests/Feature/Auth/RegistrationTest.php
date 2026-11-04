@@ -1,11 +1,22 @@
 <?php
 
 use App\Models\User;
+use App\Providers\AppServiceProvider;
 
 test('registration screen can be rendered', function () {
     $response = $this->get('/register');
 
     $response->assertStatus(200);
+});
+
+test('registration uses https in production when the application url is secure', function () {
+    $this->app->instance('env', 'production');
+    config(['app.url' => 'https://sportclub.example.com']);
+    (new AppServiceProvider($this->app))->boot();
+
+    $this->get('http://localhost/register')
+        ->assertOk()
+        ->assertSee('action="https://localhost/register"', false);
 });
 
 test('new users can register', function () {
