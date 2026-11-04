@@ -7,7 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Models\Plan;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'pages.inicio')->name('inicio');
+Route::get('/', fn () => view('pages.inicio', ['plans' => Plan::where('is_active', true)->orderBy('price')->get()]))->name('inicio');
 Route::view('/nosotros', 'pages.nosotros')->name('nosotros');
 Route::get('/disciplinas', function () {
     $disciplinas = [

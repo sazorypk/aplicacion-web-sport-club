@@ -1,0 +1,644 @@
+
+/* ESTILOS GENERALES */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 90px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+
+
+
+/* HEADER / NAVBAR */
+
+.header {
+    background-color: #111111;
+    padding: 15px 5%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.navbar__logo-image {
+    width: 110px;
+    height: auto;
+    display: block;
+}
+
+.navbar__menu {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+}
+
+.navbar__link {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.navbar__link:hover,
+.navbar__link:focus-visible {
+    color: #E50914;
+}
+
+.navbar__link:focus-visible,
+.navbar__button:focus-visible {
+    outline: 2px solid #FFFFFF;
+    outline-offset: 4px;
+}
+
+.navbar__button {
+    background-color: #E50914;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.navbar__button:hover {
+    background-color: #B20710;
+}
+
+
+/* HERO SECTION */
+
+.hero {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    padding: 60px 5%;
+    background-color: #181818;
+    background-image: linear-gradient(90deg, rgb(17 17 17 / 88%) 0%, rgb(17 17 17 / 65%) 55%, rgb(17 17 17 / 25%) 100%), url("../assets/img/hero.webp");
+    background-position: center;
+    background-size: cover;
+}
+
+.hero__content {
+    max-width: 720px;
+    position: relative;
+    z-index: 1;
+}
+
+.hero__title {
+    font-size: 48px;
+    line-height: 1.2;
+    margin-bottom: 25px;
+}
+
+.hero__description {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #CCCCCC;
+    margin-bottom: 30px;
+}
+
+.hero__button,
+.nosotros__button,
+.disciplina-card__button,
+.plan-card__button,
+.contacto__button {
+    display: inline-block;
+    background-color: #E50914;
+    color: white;
+    padding: 14px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.hero__button { padding: 15px 30px; }
+.disciplina-card__button { padding: 12px 20px; font-weight: normal; }
+.plan-card__button { display: block; padding: 14px; text-align: center; margin-top: auto; }
+.contacto__button { font-weight: normal; }
+
+.hero__button:hover,
+.nosotros__button:hover,
+.disciplina-card__button:hover,
+.plan-card__button:hover,
+.contacto__button:hover,
+.contacto__submit:hover {
+    background-color: #B20710;
+}
+
+
+/* SECCIÓN NOSOTROS */
+
+.nosotros {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    padding: 80px 5%;
+    background-color: #222222;
+}
+
+.nosotros__content {
+    flex: 1;
+}
+
+.nosotros__title {
+    font-size: 36px;
+    margin-bottom: 25px;
+}
+
+.nosotros__description {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #CCCCCC;
+    margin-bottom: 30px;
+}
+
+.nosotros__image {
+    flex: 1;
+}
+
+.nosotros__image-file {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    object-position: center 30%;
+    border-radius: 10px;
+    display: block;
+}
+
+
+/* SECCIÓN DISCIPLINAS */
+
+.disciplinas {
+    padding: 80px 5%;
+    background-color: #111111;
+}
+
+.disciplinas__header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.disciplinas__title {
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.disciplinas__description {
+    font-size: 17px;
+    color: #CCCCCC;
+}
+
+.disciplinas__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+/* TARJETAS DE DISCIPLINAS */
+
+.disciplina-card {
+    background-color: #222222;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.disciplina-card:hover {
+    transform: translateY(-5px);
+}
+
+.disciplina-card--featured {
+    outline: 2px solid #E50914;
+    outline-offset: -2px;
+}
+
+.disciplina-card__image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+.disciplina-card__content {
+    padding: 25px;
+}
+
+.disciplina-card__title {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.disciplina-card__description {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #CCCCCC;
+    margin-bottom: 25px;
+}
+
+
+/* SECCIÓN PLANES */
+
+.planes {
+    padding: 80px 5%;
+    background-color: #1B1B1B;
+}
+
+.planes__header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.planes__title {
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.planes__description {
+    color: #CCCCCC;
+    font-size: 17px;
+}
+
+.planes__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.testimonios {
+    padding: 80px 5%;
+    background-color: #222222;
+}
+
+.testimonios__header {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.testimonios__title {
+    margin-bottom: 15px;
+    font-size: 36px;
+}
+
+.testimonios__description {
+    color: #CCCCCC;
+    font-size: 17px;
+}
+
+.testimonios__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.testimonio-card {
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #292929;
+}
+
+.testimonio-card--featured {
+    border: 2px solid #E50914;
+    transform: translateY(-8px);
+}
+
+.testimonio-card__avatar {
+    display: grid;
+    width: 54px;
+    height: 54px;
+    margin-bottom: 20px;
+    place-items: center;
+    border-radius: 50%;
+    background-color: #E50914;
+    font-weight: bold;
+}
+
+.testimonio-card__quote {
+    margin-bottom: 22px;
+    color: #DDDDDD;
+    line-height: 1.7;
+}
+
+.testimonio-card__name {
+    margin-bottom: 5px;
+}
+
+.testimonio-card__role {
+    color: #AAAAAA;
+    font-size: 14px;
+}
+
+/* TARJETAS DE PLANES */
+
+.plan-card {
+    background-color: #292929;
+    padding: 30px;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.plan-card__title {
+    font-size: 25px;
+    margin-bottom: 15px;
+}
+
+.plan-card__price {
+    color: #FFFFFF;
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0 0 15px;
+}
+
+.plan-card__price span {
+    color: #CCCCCC;
+    font-size: 15px;
+    font-weight: normal;
+}
+
+.plan-card__description {
+    font-size: 16px;
+    color: #CCCCCC;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.plan-card__list {
+    list-style: none;
+    margin-bottom: 30px;
+}
+
+.plan-card__item {
+    padding: 10px 0;
+    border-bottom: 1px solid #444444;
+    font-size: 15px;
+}
+
+/* MODIFICADOR BEM - PLAN DESTACADO */
+
+.plan-card--featured {
+    border: 2px solid #E50914;
+}
+
+.plan-card__badge {
+    display: inline-block;
+    align-self: flex-start;
+    background-color: #E50914;
+    color: white;
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+
+/* SECCIÓN CONTACTO */
+
+.contacto {
+    display: flex;
+    gap: 50px;
+    padding: 80px 5%;
+    background-color: #111111;
+}
+
+.contacto__info {
+    flex: 1;
+}
+
+.contacto__title {
+    font-size: 36px;
+    margin-bottom: 25px;
+}
+
+.contacto__description {
+    font-size: 17px;
+    line-height: 1.7;
+    color: #CCCCCC;
+    margin-bottom: 30px;
+}
+
+.contacto__subtitle {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+/* FORMULARIO */
+
+.contacto__form-container {
+    flex: 1;
+    background-color: #222222;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.contacto__form-title {
+    font-size: 25px;
+    margin-bottom: 25px;
+}
+
+.contacto__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.contacto__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contacto__label {
+    font-size: 15px;
+}
+
+.contacto__input,
+.contacto__select,
+.contacto__textarea {
+    width: 100%;
+    padding: 12px;
+    background-color: #333333;
+    border: 1px solid #555555;
+    border-radius: 5px;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+}
+
+.contacto__input:focus,
+.contacto__select:focus,
+.contacto__textarea:focus {
+    outline: 2px solid #E50914;
+}
+
+.contacto__input:invalid:not(:placeholder-shown),
+.contacto__textarea:invalid:not(:placeholder-shown),
+.contacto__select:invalid {
+    border-color: #FF5964;
+    box-shadow: 0 0 0 2px rgb(255 89 100 / 20%);
+}
+
+.contacto__input:focus-visible,
+.contacto__select:focus-visible,
+.contacto__textarea:focus-visible,
+.contacto__submit:focus-visible {
+    outline: 2px solid #FFFFFF;
+    outline-offset: 2px;
+}
+
+.contacto__textarea {
+    resize: vertical;
+}
+
+.contacto__submit {
+    background-color: #E50914;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+/* 8. FOOTER */
+
+.footer {
+    background-color: #080808;
+    padding: 50px 5% 20px;
+}
+
+.footer__container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer__logo-image {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+.footer__description {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #AAAAAA;
+}
+
+.footer__title {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.footer__menu {
+    list-style: none;
+}
+
+.footer__item {
+    margin-bottom: 12px;
+}
+
+.footer__link {
+    color: #CCCCCC;
+    text-decoration: none;
+}
+
+.footer__link:hover {
+    color: #E50914;
+}
+
+.footer__phone {
+    color: #CCCCCC;
+    margin-bottom: 20px;
+}
+
+.footer__contact-link {
+    color: #E50914;
+    text-decoration: none;
+}
+
+.footer__contact-link:hover {
+    color: white;
+}
+
+.footer__socials {
+    display: flex;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.footer__social-link {
+    display: grid;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    border-radius: 50%;
+    background-color: #292929;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.footer__social-link:hover,
+.footer__social-link:focus-visible {
+    background-color: #E50914;
+    color: #FFFFFF;
+}
+
+.footer__social-link:focus-visible {
+    outline: 2px solid #FFFFFF;
+    outline-offset: 3px;
+}
+
+.footer__bottom {
+    border-top: 1px solid #333333;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.footer__copyright {
+    font-size: 14px;
+    color: #888888;
+}
+
+
+
+
+.navbar__actions { display: flex; align-items: center; gap: 18px; }
+.navbar__logout { background: transparent; color: white; border: 1px solid #888; border-radius: 5px; padding: 11px 16px; cursor: pointer; font: inherit; }
+@media (max-width: 800px) {
+    .navbar { flex-wrap: wrap; gap: 18px; }
+    .navbar__menu { order: 3; width: 100%; overflow-x: auto; padding-bottom: 4px; gap: 20px; }
+    .navbar__actions { margin-left: auto; }
+    .nosotros, .contacto { flex-direction: column; }
+    .nosotros__image, .contacto__form-container { width: 100%; }
+    .disciplinas__grid, .planes__grid, .testimonios__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 540px) {
+    .navbar__logo-image { width: 80px; }
+    .navbar__actions { gap: 10px; font-size: 14px; }
+    .navbar__button, .navbar__logout { padding: 10px; }
+    .hero__title { font-size: 36px; }
+    .nosotros__title, .disciplinas__title, .testimonios__title, .planes__title, .contacto__title { font-size: 29px; }
+    .disciplinas__grid, .planes__grid, .testimonios__grid, .footer__container { grid-template-columns: 1fr; }
+    .testimonio-card--featured { transform: none; }
+    .nosotros__image-file { height: 280px; }
+}
