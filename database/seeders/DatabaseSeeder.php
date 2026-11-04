@@ -12,8 +12,8 @@ class DatabaseSeeder extends Seeder
     {
         foreach ([
             ['name' => "Plan B\u{00E1}sico", 'description' => 'Acceso a una disciplina y uso de la sede elegida.', 'price' => 89900],
-            ['name' => 'Plan Premium', 'description' => 'Acceso a todas las disciplinas y zonas de entrenamiento.', 'price' => 149900, 'includes_all_disciplines' => true],
-            ['name' => 'Plan Full Sport', 'description' => 'Acceso a tres disciplinas e instalaciones del club.', 'price' => 219900, 'discipline_limit' => 3],
+            ['name' => 'Plan Premium', 'description' => 'Acceso a tres disciplinas y zonas de entrenamiento.', 'price' => 149900, 'discipline_limit' => 3],
+            ['name' => 'Plan Full Sport', 'description' => 'Acceso a todas las disciplinas e instalaciones del club.', 'price' => 219900, 'includes_all_disciplines' => true],
         ] as $plan) {
             Plan::firstOrCreate(['name' => $plan['name']], $plan + ['is_active' => true]);
         }

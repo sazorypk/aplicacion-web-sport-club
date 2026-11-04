@@ -71,12 +71,12 @@ it('shows the same public header on the landing page and login screen', function
     }
 });
 
-it('shows all disciplines included in the seeded premium plan', function () {
+it('shows three disciplines included in the seeded premium plan', function () {
     $this->seed();
 
     $this->get(route('planes'))
         ->assertOk()
-        ->assertSee('Acceso a todas las disciplinas y zonas de entrenamiento.');
+        ->assertSee('Acceso a tres disciplinas y zonas de entrenamiento.');
 });
 
 it('updates the existing default premium description without changing other plans', function () {

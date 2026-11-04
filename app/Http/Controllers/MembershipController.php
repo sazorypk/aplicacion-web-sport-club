@@ -6,6 +6,7 @@ use App\Models\Membership;
 use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\Sede;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -63,6 +64,31 @@ class MembershipController extends Controller
         ]);
 
         return redirect()->route('mi-membresia.index')->with('success', 'Inscripcion creada.');
+    }
+
+    public function updateDisciplines(Request $request, Membership $membership): RedirectResponse
+    {
+        abort_unless($membership->user_id === $request->user()->id, 403);
+        $membership->load('plan');
+        $selectedDisciplines = $membership->disciplines ?? ($membership->discipline ? [$membership->discipline] : []);
+
+        if ($membership->plan->includes_all_disciplines || ! in_array($membership->status, ['pending', 'active'], true) || count($selectedDisciplines) >= $membership->plan->discipline_limit) {
+            return back()->with('error', 'Esta membresía no tiene disciplinas pendientes de selección.');
+        }
+
+        $data = $request->validate([
+            'disciplines' => ['required', 'array', 'size:'.$membership->plan->discipline_limit],
+            'disciplines.*' => ['distinct', Rule::in(Membership::DISCIPLINES)],
+        ], [
+            'disciplines.required' => 'Selecciona las disciplinas que deseas practicar.',
+            'disciplines.size' => 'Selecciona exactamente :size disciplina(s).',
+            'disciplines.*.distinct' => 'No puedes repetir una disciplina.',
+            'disciplines.*.in' => 'Selecciona una disciplina válida.',
+        ]);
+
+        $membership->update(['disciplines' => $data['disciplines']]);
+
+        return back()->with('success', 'Tus disciplinas se guardaron correctamente.');
     }
 
     public function simulatePayment(Request $request, Membership $membership)

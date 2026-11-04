@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/mi-membresia', [MembershipController::class, 'index'])->name('mi-membresia.index');
     Route::get('/mi-membresia/crear', [MembershipController::class, 'create'])->name('mi-membresia.create');
     Route::post('/mi-membresia', [MembershipController::class, 'store'])->name('mi-membresia.store');
+    Route::patch('/mi-membresia/{membership}/disciplinas', [MembershipController::class, 'updateDisciplines'])->name('mi-membresia.disciplinas');
     Route::post('/mi-membresia/{membership}/pago-simulado', [MembershipController::class, 'simulatePayment'])->name('mi-membresia.pago-simulado');
 });
 
