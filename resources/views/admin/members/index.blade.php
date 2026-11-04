@@ -6,16 +6,16 @@
     <p class="text-secondary">Cancela una membresía para conservar su historial, o elimínala junto con sus pagos antes de borrar al usuario.</p>
     @include('shared.flash')
     <div class="table-responsive">
-        <table class="table table-striped align-middle">
+        <table class="table table-striped align-middle admin-members-table">
             <thead><tr><th>Documento</th><th>Nombre</th><th>Correo</th><th>Contacto</th><th>Membresías</th><th>Usuario</th></tr></thead>
             <tbody>
                 @forelse($members as $member)
                     <tr>
-                        <td>{{ $member->cedula ?: '—' }}</td>
-                        <td>{{ $member->name }}</td>
-                        <td>{{ $member->email }}</td>
-                        <td>{{ $member->phone ?: '—' }}</td>
-                        <td>
+                        <td data-label="Documento">{{ $member->cedula ?: '—' }}</td>
+                        <td data-label="Nombre">{{ $member->name }}</td>
+                        <td data-label="Correo">{{ $member->email }}</td>
+                        <td data-label="Contacto">{{ $member->phone ?: '—' }}</td>
+                        <td data-label="Membresías">
                             @forelse($member->memberships as $membership)
                                 <div class="border rounded p-2 mb-2">
                                     <div><strong>{{ $membership->plan->name }}</strong> · {{ $membership->sede->name }}</div>
@@ -36,7 +36,7 @@
                                 <span class="text-secondary">Sin inscripción</span>
                             @endforelse
                         </td>
-                        <td>
+                        <td data-label="Usuario">
                             @if($member->role === 'master')
                                 <span class="text-secondary small">Cuenta maestra</span>
                             @elseif($member->memberships->isNotEmpty())

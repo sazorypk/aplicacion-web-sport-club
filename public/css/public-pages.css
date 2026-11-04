@@ -28,3 +28,17 @@
 .location-card__link { display: flex; justify-content: space-between; gap: 10px; border-top: 1px solid #444; padding-top: 23px; margin-top: 20px; color: #ff525c; text-decoration: none; font-weight: bold; }
 .location-card__link:hover { color: white; }
 @media (max-width: 700px) { .locations-grid { grid-template-columns: 1fr; } .location-cta, .locations-heading { flex-direction: column; align-items: flex-start; } .locations-hero { padding-top: 75px; padding-bottom: 80px; } }
+
+@media (max-width: 540px) {
+    .hero { min-height: 70vh; padding: 54px 5%; background-position: 60% center; }
+    .hero__title { font-size: clamp(30px, 9vw, 36px); }
+    .hero__description { font-size: 16px; }
+    .nosotros, .disciplinas, .testimonios, .planes, .contacto { padding: 58px 5%; }
+    .nosotros, .contacto { gap: 30px; }
+    .contacto__form-container { padding: 22px; }
+    .footer__container { gap: 28px; }
+    .location-cta { padding: 55px 5%; }
+    .locations-section { padding: 60px 5%; }
+    .locations-hero h1 { font-size: clamp(32px, 10vw, 44px); overflow-wrap: anywhere; }
+    .location-card__hours div { flex-wrap: wrap; }
+}

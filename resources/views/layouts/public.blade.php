@@ -5,7 +5,7 @@
 @guest
 @include('layouts.public-header')
 @else
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark account-nav">
     <div class="container">
         <a class="navbar-brand" href="{{ auth()->user()->role === 'master' ? route('admin.dashboard') : route('dashboard') }}">Sport Club</a>
         <div class="d-flex gap-2 align-items-center ms-auto">
