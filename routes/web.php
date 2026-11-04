@@ -14,10 +14,10 @@ Route::get('/', function (Request $request) {
         return redirect()->route($request->user()->role === 'master' ? 'admin.dashboard' : 'dashboard');
     }
 
-    return view('pages.inicio', ['plans' => Plan::where('is_active', true)->orderBy('price')->get()]);
+    return view('pages.inicio');
 })->name('inicio');
 Route::middleware('guest')->group(function () {
-    Route::view('/nosotros', 'pages.nosotros')->name('nosotros');
+    Route::redirect('/nosotros', '/#nosotros')->name('nosotros');
     Route::view('/disciplinas', 'pages.disciplinas')->name('disciplinas');
     Route::get('/planes', fn () => view('pages.planes', ['plans' => Plan::where('is_active', true)->orderBy('price')->get()]))->name('planes');
     Route::get('/sedes', fn () => view('pages.sedes', ['sedes' => Sede::where('is_active', true)->orderBy('name')->get()]))->name('sedes');
@@ -40,6 +40,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'master'])->group(fu
     Route::resource('planes', PlanController::class)->except('show');
     Route::get('/miembros', [MemberController::class, 'index'])->name('miembros.index');
     Route::patch('/membresias/{membership}/cancelar', [MemberController::class, 'cancelMembership'])->name('membresias.cancelar');
+    Route::delete('/membresias/{membership}', [MemberController::class, 'destroyMembership'])->name('membresias.destroy');
+    Route::delete('/miembros/{member}', [MemberController::class, 'destroy'])->name('miembros.destroy');
 });
 
 require __DIR__.'/auth.php';

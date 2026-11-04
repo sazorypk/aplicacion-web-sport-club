@@ -23,30 +23,6 @@
                 <img src="{{ asset('assets/img/nosotros.webp') }}" alt="Comunidad deportiva de Sport Club" class="nosotros__image-file" loading="lazy">
             </div>
         </section>
-<!-- 4. SECCIÓN PLANES -->
-        <section class="planes" id="planes">
-
-            <div class="planes__header">
-                <h2 class="planes__title">ELIGE TU PLAN IDEAL</h2>
-                <p class="planes__description">Tenemos diferentes alternativas para que puedas disfrutar del deporte a tu ritmo.</p>
-            </div>
-
-            <div class="planes__grid">
-
-                @forelse ($plans as $plan)
-                <article class="plan-card {{ $loop->iteration === 2 ? 'plan-card--featured' : '' }}">
-                    @if ($loop->iteration === 2)<span class="plan-card__badge">Destacado</span>@endif
-                    <h3 class="plan-card__title">{{ $plan->name }}</h3>
-                    <p class="plan-card__price">${{ number_format((float) $plan->price, 0, ',', '.') }} <span>/ mes</span></p>
-                    <p class="plan-card__description">{{ $plan->description }}</p>
-                    <a href="{{ route('mi-membresia.create') }}" class="plan-card__button">Elegir plan</a>
-                </article>
-                @empty
-                <p>Pronto publicaremos nuestros planes.</p>
-                @endforelse
-
-            </div>
-        </section>
 <!-- TESTIMONIOS -->
         <section class="testimonios" id="testimonios">
             <div class="testimonios__header">

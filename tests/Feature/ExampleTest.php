@@ -49,11 +49,11 @@ it('shows the master panel link to signed in administrators', function () {
         ->assertSee('Panel maestro');
 });
 
-it('displays only active plans with their current prices on the landing page', function () {
+it('displays only active plans with their current prices on the plans page', function () {
     Plan::create(['name' => 'Plan vigente', 'description' => 'Entrenamiento', 'price' => 125000, 'is_active' => true]);
     Plan::create(['name' => 'Plan inactivo', 'description' => 'Anterior', 'price' => 50000, 'is_active' => false]);
 
-    $this->get(route('inicio'))
+    $this->get(route('planes'))
         ->assertOk()
         ->assertSee('Plan vigente')
         ->assertSee('$125.000')
@@ -74,7 +74,7 @@ it('shows the same public header on the landing page and login screen', function
 it('shows all disciplines included in the seeded premium plan', function () {
     $this->seed();
 
-    $this->get(route('inicio'))
+    $this->get(route('planes'))
         ->assertOk()
         ->assertSee('Acceso a todas las disciplinas y zonas de entrenamiento.');
 });

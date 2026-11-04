@@ -5,7 +5,6 @@
         </a>
         <ul class="public-header__menu" id="landing-menu">
             <li><a href="{{ route('inicio') }}" class="public-header__link">Inicio</a></li>
-            <li><a href="{{ route('nosotros') }}" class="public-header__link">Nosotros</a></li>
             <li><a href="{{ route('disciplinas') }}" class="public-header__link">Disciplinas</a></li>
             <li><a href="{{ route('planes') }}" class="public-header__link">Planes</a></li>
             <li><a href="{{ route('sedes') }}" class="public-header__link">Sedes y horarios</a></li>

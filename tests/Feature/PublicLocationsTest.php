@@ -34,8 +34,24 @@ it('removes the centre location from enrollment while preserving existing member
 it('opens the public sections as separate pages', function (string $route, string $heading) {
     $this->get(route($route))->assertOk()->assertSee($heading)->assertSee(route('sedes'));
 })->with([
-    ['nosotros', 'MÁS QUE UN CLUB'],
     ['disciplinas', 'ENCUENTRA TU DISCIPLINA'],
     ['planes', 'ELIGE TU PLAN IDEAL'],
     ['contacto', '¿LISTO PARA SUPERAR TUS LÍMITES?'],
 ]);
+
+it('redirects the former about page to the home section', function () {
+    $this->get(route('nosotros'))->assertRedirect('/#nosotros');
+});
+
+it('keeps the community and about sections on home while listing plans on their own page', function () {
+    $this->get(route('inicio'))->assertOk()
+        ->assertSee('MÁS QUE UN CLUB')
+        ->assertSee('LO QUE DICE NUESTRA COMUNIDAD')
+        ->assertDontSee('ELIGE TU PLAN IDEAL');
+    $this->get(route('planes'))->assertOk()->assertSee('ELIGE TU PLAN IDEAL');
+});
+
+it('does not show the about link in the header', function () {
+    $this->get(route('inicio'))->assertOk()
+        ->assertDontSee('class="public-header__link">Nosotros</a>', false);
+});

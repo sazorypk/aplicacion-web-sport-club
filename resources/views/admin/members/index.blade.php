@@ -1,13 +1,60 @@
 @extends('layouts.public')
 @section('title', 'Miembros registrados')
 @section('content')
-<div class="container py-5"><h1 class="mb-4">Miembros registrados</h1>@include('shared.flash')<div class="table-responsive"><table class="table table-striped align-middle"><thead><tr><th>Documento</th><th>Nombre</th><th>Correo</th><th>Contacto</th><th>Plan</th><th>Sede</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>
-@forelse($members as $member)
-@php($membership = $member->memberships->first(fn ($item) => in_array($item->status, ['pending', 'active'], true)) ?? $member->memberships->first())
-<tr><td>{{ $member->cedula ?: '—' }}</td><td>{{ $member->name }}</td><td>{{ $member->email }}</td><td>{{ $member->phone ?: '—' }}</td><td>{{ $membership?->plan?->name ?? 'Sin inscripción' }}</td><td>{{ $membership?->sede?->name ?? '—' }}</td><td>{{ match ($membership?->status) { 'active' => 'Activa', 'pending' => 'Pendiente', 'cancelled' => 'Cancelada', null => '—', default => $membership->status } }}</td><td>
-@if($membership && in_array($membership->status, ['pending', 'active'], true))
-<form method="POST" action="{{ route('admin.membresias.cancelar', $membership) }}" onsubmit="return confirm('¿Deseas cancelar esta membresía?')">@csrf @method('PATCH')<button class="btn btn-sm btn-outline-danger" type="submit">Cancelar membresía</button></form>
-@else — @endif
-</td></tr>@empty<tr><td colspan="8">No hay usuarios registrados.</td></tr>@endforelse
-</tbody></table></div>{{ $members->links() }}</div>
+<div class="container py-5">
+    <h1 class="mb-2">Miembros registrados</h1>
+    <p class="text-secondary">Cancela una membresía para conservar su historial, o elimínala junto con sus pagos antes de borrar al usuario.</p>
+    @include('shared.flash')
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead><tr><th>Documento</th><th>Nombre</th><th>Correo</th><th>Contacto</th><th>Membresías</th><th>Usuario</th></tr></thead>
+            <tbody>
+                @forelse($members as $member)
+                    <tr>
+                        <td>{{ $member->cedula ?: '—' }}</td>
+                        <td>{{ $member->name }}</td>
+                        <td>{{ $member->email }}</td>
+                        <td>{{ $member->phone ?: '—' }}</td>
+                        <td>
+                            @forelse($member->memberships as $membership)
+                                <div class="border rounded p-2 mb-2">
+                                    <div><strong>{{ $membership->plan->name }}</strong> · {{ $membership->sede->name }}</div>
+                                    <div class="small mb-2">{{ match ($membership->status) { 'active' => 'Activa', 'pending' => 'Pendiente', 'cancelled' => 'Cancelada', default => $membership->status } }}</div>
+                                    @if(in_array($membership->status, ['pending', 'active'], true))
+                                        <form method="POST" action="{{ route('admin.membresias.cancelar', $membership) }}" onsubmit="return confirm('¿Deseas cancelar esta membresía? Se conservarán sus pagos.')">
+                                            @csrf @method('PATCH')
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">Cancelar membresía</button>
+                                        </form>
+                                    @elseif($membership->status === 'cancelled')
+                                        <form method="POST" action="{{ route('admin.membresias.destroy', $membership) }}" onsubmit="return confirm('¿Eliminar definitivamente esta membresía y todos sus pagos asociados? Esta acción no se puede deshacer.')">
+                                            @csrf @method('DELETE')
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">Eliminar membresía</button>
+                                        </form>
+                                    @endif
+                                </div>
+                            @empty
+                                <span class="text-secondary">Sin inscripción</span>
+                            @endforelse
+                        </td>
+                        <td>
+                            @if($member->role === 'master')
+                                <span class="text-secondary small">Cuenta maestra</span>
+                            @elseif($member->memberships->isNotEmpty())
+                                <span class="text-secondary small">Elimina primero todas sus membresías.</span>
+                            @else
+                                <form method="POST" action="{{ route('admin.miembros.destroy', $member) }}" onsubmit="return confirm('¿Eliminar definitivamente esta cuenta de usuario? Esta acción no se puede deshacer.')">
+                                    @csrf @method('DELETE')
+                                    <button class="btn btn-sm btn-danger" type="submit">Eliminar usuario</button>
+                                </form>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="6">No hay usuarios registrados.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    {{ $members->links() }}
+</div>
 @endsection
