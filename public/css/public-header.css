@@ -1,0 +1,22 @@
+.public-header { background-color: #111; padding: 15px 5%; position: sticky; top: 0; z-index: 1000; font-family: Arial, sans-serif; }
+.public-header *, .public-header *::before, .public-header *::after { box-sizing: border-box; }
+.public-header__nav { display: flex; justify-content: space-between; align-items: center; gap: 30px; }
+.public-header__logo-image { width: 110px; height: auto; display: block; }
+.public-header__menu { display: flex; gap: 30px; list-style: none; margin: 0; padding: 0; }
+.public-header__link { color: white; text-decoration: none; font-size: 16px; transition: color .3s; }
+.public-header__link:hover, .public-header__link:focus-visible { color: #e50914; }
+.public-header__button { display: inline-block; background: #e50914; color: white; padding: 12px 22px; border-radius: 5px; text-decoration: none; font-weight: bold; }
+.public-header__button:hover { background: #b20710; color: white; }
+.public-header__link:focus-visible, .public-header__button:focus-visible { outline: 2px solid white; outline-offset: 4px; }
+.public-header__actions { display: flex; align-items: center; gap: 18px; }
+@media (max-width: 800px) {
+    .public-header__nav { flex-wrap: wrap; gap: 18px; }
+    .public-header__menu { order: 3; width: 100%; overflow-x: auto; padding-bottom: 4px; gap: 20px; }
+    .public-header__actions { margin-left: auto; }
+}
+@media (max-width: 540px) {
+    .public-header__logo-image { width: 80px; }
+    .public-header__actions { gap: 10px; }
+    .public-header__actions .public-header__link { font-size: 14px; }
+    .public-header__button { padding: 10px; font-size: 14px; }
+}

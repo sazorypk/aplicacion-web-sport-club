@@ -9,6 +9,7 @@ use App\Models\Sede;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class MembershipController extends Controller
 {
@@ -28,7 +29,7 @@ class MembershipController extends Controller
         $plans = Plan::where('is_active', true)->orderBy('price')->get();
         $sedes = Sede::where('is_active', true)->orderBy('name')->get();
 
-        return view('memberships.create', compact('plans', 'sedes'));
+        return view('memberships.create', ['plans' => $plans, 'sedes' => $sedes, 'disciplines' => Membership::DISCIPLINES]);
     }
 
     public function store(Request $request)
@@ -42,10 +43,21 @@ class MembershipController extends Controller
         ]);
         $plan = Plan::whereKey($data['plan_id'])->where('is_active', true)->firstOrFail();
         $sede = Sede::whereKey($data['sede_id'])->where('is_active', true)->firstOrFail();
+        $disciplineData = $request->validate([
+            'disciplines' => [Rule::excludeIf($plan->includes_all_disciplines), 'required', 'array', 'size:'.$plan->discipline_limit],
+            'disciplines.*' => [Rule::excludeIf($plan->includes_all_disciplines), 'distinct', Rule::in(Membership::DISCIPLINES)],
+        ], [
+            'disciplines.required' => 'Selecciona las disciplinas que deseas practicar.',
+            'disciplines.array' => 'Selecciona disciplinas válidas.',
+            'disciplines.size' => 'Selecciona exactamente :size disciplina(s).',
+            'disciplines.*.in' => 'Selecciona una disciplina válida.',
+            'disciplines.*.distinct' => 'No puedes repetir una disciplina.',
+        ]);
         $membership = Membership::create([
             'user_id' => $request->user()->id,
             'plan_id' => $plan->id,
             'sede_id' => $sede->id,
+            'disciplines' => $disciplineData['disciplines'] ?? null,
             'price_at_signup' => $plan->price,
             'status' => 'pending',
         ]);

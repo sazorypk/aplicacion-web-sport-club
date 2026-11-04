@@ -5,24 +5,24 @@ use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Plan;
+use App\Models\Sede;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => view('pages.inicio', ['plans' => Plan::where('is_active', true)->orderBy('price')->get()]))->name('inicio');
-Route::view('/nosotros', 'pages.nosotros')->name('nosotros');
-Route::get('/disciplinas', function () {
-    $disciplinas = [
-        ['nombre' => "F\u{00FA}tbol", 'descripcion' => 'Mejora tu tecnica, resistencia y trabajo en equipo.', 'imagen' => 'futbol.webp'],
-        ['nombre' => "Nataci\u{00F3}n", 'descripcion' => 'Entrenamiento completo para todos los niveles.', 'imagen' => 'natacion.webp'],
-        ['nombre' => 'Baloncesto', 'descripcion' => 'Practica velocidad, coordinacion y estrategia.', 'imagen' => 'baloncesto.webp'],
-        ['nombre' => 'Voleibol', 'descripcion' => 'Desarrolla agilidad y juego en equipo.', 'imagen' => 'voleibol.webp'],
-        ['nombre' => 'Atletismo', 'descripcion' => 'Entrena fuerza, velocidad y resistencia.', 'imagen' => 'atletismo.webp'],
-        ['nombre' => 'Gimnasio', 'descripcion' => 'Trabaja fuerza y acondicionamiento fisico.', 'imagen' => 'gimnasio.webp'],
-    ];
+Route::get('/', function (Request $request) {
+    if ($request->user()) {
+        return redirect()->route($request->user()->role === 'master' ? 'admin.dashboard' : 'dashboard');
+    }
 
-    return view('pages.disciplinas', compact('disciplinas'));
-})->name('disciplinas');
-Route::get('/planes', fn () => view('pages.planes', ['plans' => Plan::where('is_active', true)->orderBy('price')->get()]))->name('planes');
-Route::view('/contacto', 'pages.contacto')->name('contacto');
+    return view('pages.inicio', ['plans' => Plan::where('is_active', true)->orderBy('price')->get()]);
+})->name('inicio');
+Route::middleware('guest')->group(function () {
+    Route::view('/nosotros', 'pages.nosotros')->name('nosotros');
+    Route::view('/disciplinas', 'pages.disciplinas')->name('disciplinas');
+    Route::get('/planes', fn () => view('pages.planes', ['plans' => Plan::where('is_active', true)->orderBy('price')->get()]))->name('planes');
+    Route::get('/sedes', fn () => view('pages.sedes', ['sedes' => Sede::where('is_active', true)->orderBy('name')->get()]))->name('sedes');
+    Route::view('/contacto', 'pages.contacto')->name('contacto');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

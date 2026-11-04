@@ -1,27 +1,29 @@
-@extends('layouts.public')
-
-@section('title', 'Planes')
-
+@extends('layouts.marketing')
+@section('title', 'Planes | Sport Club')
 @section('content')
-<div class="container py-5">
-    <h1 class="text-center mb-2">Planes del club</h1>
-    <p class="text-center text-secondary mb-5">Elige la opci&oacute;n que se ajuste a tus objetivos.</p>
+<!-- 4. SECCIÓN PLANES -->
+        <section class="planes" id="planes">
 
-    <div class="row g-4">
-        @forelse($plans as $plan)
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body d-flex flex-column">
-                        <h2 class="h4">{{ $plan->name }}</h2>
-                        <p class="text-secondary">{{ $plan->description }}</p>
-                        <p class="fs-4 fw-bold"><span>$</span>{{ number_format((float) $plan->price, 0, ',', '.') }} <small class="fs-6 fw-normal">COP / mes</small></p>
-                        <a class="btn btn-primary mt-auto" href="{{ route('mi-membresia.create') }}">Elegir este plan</a>
-                    </div>
-                </div>
+            <div class="planes__header">
+                <h2 class="planes__title">ELIGE TU PLAN IDEAL</h2>
+                <p class="planes__description">Tenemos diferentes alternativas para que puedas disfrutar del deporte a tu ritmo.</p>
             </div>
-        @empty
-            <div class="col-12"><div class="alert alert-info">Pronto publicaremos nuestros planes.</div></div>
-        @endforelse
-    </div>
-</div>
+
+            <div class="planes__grid">
+
+                @forelse ($plans as $plan)
+                <article class="plan-card {{ $loop->iteration === 2 ? 'plan-card--featured' : '' }}">
+                    @if ($loop->iteration === 2)<span class="plan-card__badge">Destacado</span>@endif
+                    <h3 class="plan-card__title">{{ $plan->name }}</h3>
+                    <p class="plan-card__price">${{ number_format((float) $plan->price, 0, ',', '.') }} <span>/ mes</span></p>
+                    <p class="plan-card__description">{{ $plan->description }}</p>
+                    <a href="{{ route('mi-membresia.create') }}" class="plan-card__button">Elegir plan</a>
+                </article>
+                @empty
+                <p>Pronto publicaremos nuestros planes.</p>
+                @endforelse
+
+            </div>
+        </section>
+<section class="location-cta"><div><span class="eyebrow">ENTRENA CERCA DE TI</span><h2>ENCUENTRA TU LUGAR EN EL CLUB</h2><p>Conoce nuestras sedes en Bello y Envigado y encuentra el horario que se adapta a ti.</p></div><a class="hero__button" href="{{ route('sedes') }}">Ver sedes y horarios →</a></section>
 @endsection

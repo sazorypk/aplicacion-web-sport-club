@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['user_id', 'plan_id', 'sede_id', 'price_at_signup', 'status', 'start_date', 'end_date'])]
+#[Fillable(['user_id', 'plan_id', 'sede_id', 'discipline', 'disciplines', 'price_at_signup', 'status', 'start_date', 'end_date'])]
 class Membership extends Model
 {
+    public const DISCIPLINES = ['Fútbol', 'Baloncesto', 'Natación', 'Atletismo', 'Voleibol', 'Gimnasio'];
+
     protected function casts(): array
     {
-        return ['price_at_signup' => 'decimal:2', 'start_date' => 'date', 'end_date' => 'date'];
+        return ['disciplines' => 'array', 'price_at_signup' => 'decimal:2', 'start_date' => 'date', 'end_date' => 'date'];
     }
 
     public function user(): BelongsTo
