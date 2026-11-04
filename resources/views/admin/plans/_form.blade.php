@@ -1,0 +1,6 @@
+@csrf
+<div class="mb-3"><label class="form-label" for="name">Nombre</label><input class="form-control" id="name" name="name" required maxlength="255" value="{{ old('name', $plan->name ?? '') }}">@error('name')<div class="text-danger">{{ $message }}</div>@enderror</div>
+<div class="mb-3"><label class="form-label" for="description">Descripción</label><textarea class="form-control" id="description" name="description" rows="3">{{ old('description', $plan->description ?? '') }}</textarea>@error('description')<div class="text-danger">{{ $message }}</div>@enderror</div>
+<div class="mb-3"><label class="form-label" for="price">Precio mensual (COP)</label><input class="form-control" id="price" name="price" type="number" min="0" step="100" required value="{{ old('price', $plan->price ?? '') }}">@error('price')<div class="text-danger">{{ $message }}</div>@enderror</div>
+<div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1" @checked(old('is_active', $plan->is_active ?? true))><label class="form-check-label" for="is_active">Disponible para inscripciones</label></div>
+<button class="btn btn-primary">Guardar</button> <a class="btn btn-outline-secondary" href="{{ route('admin.planes.index') }}">Cancelar</a>
