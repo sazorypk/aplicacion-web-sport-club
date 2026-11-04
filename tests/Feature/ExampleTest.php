@@ -98,3 +98,10 @@ it('preserves a customized premium description during the data migration', funct
 
     $this->assertDatabaseHas('plans', ['name' => 'Plan Premium', 'description' => 'Descripción personalizada']);
 });
+
+it('links the displayed phone number to WhatsApp in the public footer', function () {
+    $this->get(route('inicio'))->assertOk()
+        ->assertSee('href="https://wa.me/573217868266"', false)
+        ->assertSee('+57 321 786 8266')
+        ->assertDontSee('Envíanos un mensaje →');
+});

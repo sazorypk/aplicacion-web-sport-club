@@ -99,3 +99,14 @@ it('shows every membership and requires all of them to be deleted before deletin
     $this->assertModelExists($member);
     $this->assertModelExists($second);
 });
+
+it('does not offer a master account deletion for the signed in administrator', function () {
+    $master = User::factory()->create(['role' => 'master']);
+    $member = User::factory()->create();
+
+    $this->actingAs($master)->get(route('admin.miembros.index'))
+        ->assertOk()
+        ->assertSee('Tu cuenta')
+        ->assertDontSee('action="'.route('admin.miembros.destroy', $master).'"', false)
+        ->assertSee('action="'.route('admin.miembros.destroy', $member).'"', false);
+});
