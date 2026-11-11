@@ -28,6 +28,9 @@ class PasswordResetLinkController extends Controller
     {
         $request->validate([
             'email' => ['required', 'email'],
+        ], [
+            'email.required' => 'Ingresa tu correo electrónico.',
+            'email.email' => 'Ingresa un correo electrónico válido.',
         ]);
 
         // We will send the password reset link to this user. Once we have attempted
@@ -38,8 +41,12 @@ class PasswordResetLinkController extends Controller
         );
 
         return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
+                    ? back()->with('status', 'Te enviamos un enlace para restablecer tu contraseña.')
                     : back()->withInput($request->only('email'))
-                        ->withErrors(['email' => __($status)]);
+                        ->withErrors(['email' => match ($status) {
+                            Password::INVALID_USER => 'No encontramos una cuenta con ese correo electrónico.',
+                            Password::RESET_THROTTLED => 'Espera un momento antes de solicitar otro enlace.',
+                            default => 'No se pudo enviar el enlace. Inténtalo de nuevo.',
+                        }]);
     }
 }

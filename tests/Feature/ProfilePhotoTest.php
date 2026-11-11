@@ -53,7 +53,7 @@ test('photos larger than two megabytes are rejected', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)->put(route('profile.photo.update'), ['photo' => UploadedFile::fake()->image('large.jpg')->size(2049)])
-        ->assertSessionHasErrors('photo');
+        ->assertSessionHasErrors(['photo' => 'La imagen no puede superar los 2 MB.']);
 
     expect($user->fresh()->profile_photo_path)->toBeNull();
     Storage::disk('s3')->assertDirectoryEmpty('profile-photos');

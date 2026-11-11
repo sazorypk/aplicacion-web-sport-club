@@ -7,7 +7,10 @@
 @else
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark account-nav">
     <div class="container">
-        <a class="navbar-brand" href="{{ auth()->user()->role === 'master' ? route('admin.dashboard') : route('dashboard') }}">Sport Club</a>
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{{ auth()->user()->role === 'master' ? route('admin.dashboard') : route('dashboard') }}">
+            <img src="{{ asset('assets/img/logo.png') }}" alt="" class="bg-white rounded-2 p-1 object-fit-contain" width="40" height="40">
+            <span>Sport Club</span>
+        </a>
         <div class="d-flex gap-2 align-items-center ms-auto">
             <a class="btn btn-outline-light btn-sm" href="{{ route('profile.edit') }}">Mi perfil</a>
             @if(auth()->user()->role === 'master')

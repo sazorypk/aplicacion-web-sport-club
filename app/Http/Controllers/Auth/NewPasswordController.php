@@ -36,6 +36,9 @@ class NewPasswordController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ], [
+            'token.required' => 'El enlace de recuperación no es válido.',
+            'email.required' => 'Ingresa tu correo electrónico.',
+            'email.email' => 'Ingresa un correo electrónico válido.',
             'password.min' => 'La contraseña debe tener al menos :min caracteres.',
             'password.confirmed' => 'La confirmación de la contraseña no coincide.',
             'password.required' => 'La contraseña es obligatoria.',
@@ -60,8 +63,12 @@ class NewPasswordController extends Controller
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
         return $status == Password::PASSWORD_RESET
-                    ? redirect()->route('login')->with('status', __($status))
+                    ? redirect()->route('login')->with('status', 'Tu contraseña se restableció correctamente.')
                     : back()->withInput($request->only('email'))
-                        ->withErrors(['email' => __($status)]);
+                        ->withErrors(['email' => match ($status) {
+                            Password::INVALID_USER => 'No encontramos una cuenta con ese correo electrónico.',
+                            Password::INVALID_TOKEN => 'El enlace de recuperación no es válido o ha vencido.',
+                            default => 'No se pudo restablecer la contraseña. Inténtalo de nuevo.',
+                        }]);
     }
 }
