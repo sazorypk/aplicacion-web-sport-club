@@ -8,6 +8,9 @@
         <div class="col-lg-9">
             <div class="card shadow-sm">
                 <div class="card-body p-4 p-md-5">
+                    @if(auth()->user()->profile_photo_path)
+                        <img src="{{ route('profile.photo.show') }}" alt="Tu foto de perfil" class="rounded-circle object-fit-cover mb-3" width="96" height="96">
+                    @endif
                     <h1 class="h2">Bienvenido/a, {{ auth()->user()->name }}</h1>
                     <p class="lead text-secondary">Tu cuenta de Sport Club ya esta lista.</p>
 

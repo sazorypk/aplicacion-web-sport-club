@@ -9,6 +9,7 @@
     <div class="container">
         <a class="navbar-brand" href="{{ auth()->user()->role === 'master' ? route('admin.dashboard') : route('dashboard') }}">Sport Club</a>
         <div class="d-flex gap-2 align-items-center ms-auto">
+            <a class="btn btn-outline-light btn-sm" href="{{ route('profile.edit') }}">Mi perfil</a>
             @if(auth()->user()->role === 'master')
                 <a class="btn btn-outline-light btn-sm" href="{{ route('admin.dashboard') }}">Panel maestro</a>
             @else

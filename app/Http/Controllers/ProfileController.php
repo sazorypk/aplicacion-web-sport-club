@@ -6,7 +6,9 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -47,10 +49,15 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+        $photoPath = $user->profile_photo_path;
 
         Auth::logout();
 
         $user->delete();
+
+        if ($photoPath && ! Storage::disk('s3')->delete($photoPath)) {
+            Log::warning('No se pudo eliminar la foto de la cuenta eliminada.', ['user_id' => $user->id, 'path' => $photoPath]);
+        }
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
