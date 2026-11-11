@@ -36,12 +36,14 @@ class RegisteredUserController extends Controller
             'cedula' => ['required', 'string', 'max:30', 'unique:users,cedula'],
             'phone' => ['required', 'string', 'max:20'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'privacy_consent' => ['accepted'],
             'password' => ['required', 'confirmed',
                 Rules\Password::defaults()],
         ], [
             'password.min' => 'La contraseña debe tener al menos :min caracteres.',
             'password.confirmed' => 'La confirmación de la contraseña no coincide.',
             'password.required' => 'La contraseña es obligatoria.',
+            'privacy_consent.accepted' => 'Debes autorizar el tratamiento de datos para crear tu cuenta.',
         ]);
 
         $user = User::create([
@@ -51,6 +53,8 @@ class RegisteredUserController extends Controller
             'phone' => $request->phone,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'privacy_consent_at' => now(),
+            'privacy_policy_version' => User::PRIVACY_POLICY_VERSION,
         ]);
 
         event(new Registered($user));

@@ -10,6 +10,7 @@
 <div class="mb-3"><label class="form-label" for="email">Correo electrónico</label><input class="form-control" id="email" name="email" type="email" value="{{ old('email') }}" required autocomplete="email">@error('email')<div class="text-danger">{{ $message }}</div>@enderror</div>
 <div class="mb-3"><label class="form-label" for="password">Contraseña</label><input class="form-control" id="password" name="password" type="password" required autocomplete="new-password">@error('password')<div class="text-danger">{{ $message }}</div>@enderror</div>
 <div class="mb-3"><label class="form-label" for="password_confirmation">Confirmar contraseña</label><input class="form-control" id="password_confirmation" name="password_confirmation" type="password" required autocomplete="new-password"></div>
+<div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="privacy_consent" name="privacy_consent" value="1" @checked(old('privacy_consent')) required><label class="form-check-label" for="privacy_consent">Autorizo el tratamiento de mis datos personales para gestionar mi cuenta y membresía, conforme a la <a href="{{ route('privacy.policy') }}" target="_blank" rel="noopener noreferrer">política de privacidad</a>.</label>@error('privacy_consent')<div class="text-danger">{{ $message }}</div>@enderror</div>
 <button class="btn btn-primary">Registrarme</button> <a class="btn btn-outline-secondary" href="{{ route('login') }}">Ya tengo cuenta</a>
 </form></div></div></div></div></div>
 @endsection

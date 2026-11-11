@@ -9,6 +9,7 @@
     <div class="d-flex gap-2 flex-wrap mt-4">
         <a class="btn btn-primary" href="{{ route('admin.planes.index') }}">Administrar planes</a>
         <a class="btn btn-outline-primary" href="{{ route('admin.miembros.index') }}">Ver miembros</a>
+        <a class="btn btn-outline-primary" href="{{ route('admin.privacy-requests.index') }}">Solicitudes de privacidad</a>
     </div>
 </div>
 @endsection

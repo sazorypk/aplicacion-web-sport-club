@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
@@ -26,9 +28,11 @@ class PasswordController extends Controller
             'password.required' => 'La contraseña es obligatoria.',
         ]);
 
-        $request->user()->update([
-            'password' => Hash::make($validated['password']),
-        ]);
+        DB::transaction(function () use ($request, $validated): void {
+            $user = User::whereKey($request->user()->id)->lockForUpdate()->firstOrFail();
+            abort_if($user->anonymized_at, 403);
+            $user->update(['password' => Hash::make($validated['password'])]);
+        });
 
         return back()->with('status', 'password-updated');
     }

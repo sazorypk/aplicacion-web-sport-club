@@ -12,7 +12,7 @@ test('profile page is displayed', function () {
     $response->assertOk()
         ->assertSee('Información del perfil')
         ->assertSee('Cambiar contraseña')
-        ->assertSee('Eliminar cuenta');
+        ->assertSee('Solicitar eliminación de cuenta');
 });
 
 test('profile information can be updated', function () {

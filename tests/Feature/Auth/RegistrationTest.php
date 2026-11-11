@@ -28,11 +28,14 @@ test('new users can register', function () {
         'email' => 'test@example.com',
         'password' => 'password',
         'password_confirmation' => 'password',
+        'privacy_consent' => '1',
     ]);
 
     $this->assertAuthenticated();
     $response->assertRedirect(route('mi-membresia.create'));
     $this->assertDatabaseHas('users', ['username' => 'testuser', 'email' => 'test@example.com', 'role' => 'member']);
+    expect(User::where('username', 'testuser')->first()->privacy_consent_at)->not->toBeNull();
+    $this->assertDatabaseHas('users', ['username' => 'testuser', 'privacy_policy_version' => User::PRIVACY_POLICY_VERSION]);
 });
 
 test('registration requires a unique username', function () {
@@ -46,6 +49,7 @@ test('registration requires a unique username', function () {
         'email' => 'another@example.com',
         'password' => 'password',
         'password_confirmation' => 'password',
+        'privacy_consent' => '1',
     ])->assertSessionHasErrors('username');
 
     $this->assertGuest();
@@ -60,6 +64,7 @@ test('registration shows the minimum password length in Spanish', function () {
         'email' => 'test@example.com',
         'password' => '123',
         'password_confirmation' => '123',
+        'privacy_consent' => '1',
     ])->assertSessionHasErrors(['password' => 'La contraseña debe tener al menos 8 caracteres.']);
 
     $this->assertGuest();

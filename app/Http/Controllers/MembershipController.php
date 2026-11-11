@@ -6,6 +6,7 @@ use App\Models\Membership;
 use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\Sede;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -54,14 +55,29 @@ class MembershipController extends Controller
             'disciplines.*.in' => 'Selecciona una disciplina válida.',
             'disciplines.*.distinct' => 'No puedes repetir una disciplina.',
         ]);
-        $membership = Membership::create([
-            'user_id' => $request->user()->id,
-            'plan_id' => $plan->id,
-            'sede_id' => $sede->id,
-            'disciplines' => $disciplineData['disciplines'] ?? null,
-            'price_at_signup' => $plan->price,
-            'status' => 'pending',
-        ]);
+        $created = DB::transaction(function () use ($request, $plan, $sede, $disciplineData): bool {
+            $user = User::whereKey($request->user()->id)->lockForUpdate()->firstOrFail();
+            abort_if($user->anonymized_at, 403);
+
+            if ($user->memberships()->whereIn('status', ['pending', 'active'])->exists()) {
+                return false;
+            }
+
+            Membership::create([
+                'user_id' => $user->id,
+                'plan_id' => $plan->id,
+                'sede_id' => $sede->id,
+                'disciplines' => $disciplineData['disciplines'] ?? null,
+                'price_at_signup' => $plan->price,
+                'status' => 'pending',
+            ]);
+
+            return true;
+        });
+
+        if (! $created) {
+            return redirect()->route('mi-membresia.index')->with('error', 'Ya tienes una inscripción pendiente o activa.');
+        }
 
         return redirect()->route('mi-membresia.index')->with('success', 'Inscripcion creada.');
     }
@@ -86,7 +102,25 @@ class MembershipController extends Controller
             'disciplines.*.in' => 'Selecciona una disciplina válida.',
         ]);
 
-        $membership->update(['disciplines' => $data['disciplines']]);
+        $updated = DB::transaction(function () use ($request, $membership, $data): bool {
+            $user = User::whereKey($request->user()->id)->lockForUpdate()->firstOrFail();
+            abort_if($user->anonymized_at, 403);
+            $lockedMembership = Membership::whereKey($membership->id)->lockForUpdate()->firstOrFail();
+            $lockedMembership->load('plan');
+            $selectedDisciplines = $lockedMembership->disciplines ?? ($lockedMembership->discipline ? [$lockedMembership->discipline] : []);
+
+            if ($lockedMembership->plan->includes_all_disciplines || ! in_array($lockedMembership->status, ['pending', 'active'], true) || count($selectedDisciplines) >= $lockedMembership->plan->discipline_limit || count($data['disciplines']) !== $lockedMembership->plan->discipline_limit) {
+                return false;
+            }
+
+            $lockedMembership->update(['disciplines' => $data['disciplines']]);
+
+            return true;
+        });
+
+        if (! $updated) {
+            return back()->with('error', 'Esta membresía no tiene disciplinas pendientes de selección.');
+        }
 
         return back()->with('success', 'Tus disciplinas se guardaron correctamente.');
     }
@@ -97,7 +131,9 @@ class MembershipController extends Controller
         if ($membership->status !== 'pending') {
             return back()->with('error', 'Solo se puede simular el pago de una inscripción pendiente.');
         }
-        DB::transaction(function () use ($membership) {
+        DB::transaction(function () use ($membership, $request) {
+            $user = User::whereKey($request->user()->id)->lockForUpdate()->firstOrFail();
+            abort_if($user->anonymized_at, 403);
             $membership = Membership::whereKey($membership->id)->lockForUpdate()->firstOrFail();
             if ($membership->status !== 'pending') {
                 return;

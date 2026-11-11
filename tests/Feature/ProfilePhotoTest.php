@@ -12,7 +12,7 @@ test('a user can upload and view a private profile photo', function () {
     $this->actingAs($user)->put(route('profile.photo.update'), ['photo' => $photo])
         ->assertRedirect()->assertSessionHasNoErrors();
 
-    $path = $user->fresh()->profile_photo_path;
+    $path = $user->refresh()->profile_photo_path;
     Storage::disk('s3')->assertExists($path);
     $this->actingAs($user)->get(route('profile.photo.show'))->assertOk()->assertHeader('Cache-Control', 'no-store, private');
 });

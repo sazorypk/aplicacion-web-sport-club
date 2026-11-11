@@ -11,13 +11,15 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = ['name', 'username', 'cedula', 'phone', 'email', 'password'];
+    public const PRIVACY_POLICY_VERSION = '2026-11-11';
+
+    protected $fillable = ['name', 'username', 'cedula', 'phone', 'email', 'password', 'privacy_consent_at', 'privacy_policy_version'];
 
     protected $hidden = ['password', 'remember_token', 'profile_photo_path'];
 
     protected function casts(): array
     {
-        return ['email_verified_at' => 'datetime', 'password' => 'hashed'];
+        return ['email_verified_at' => 'datetime', 'privacy_consent_at' => 'datetime', 'anonymized_at' => 'datetime', 'password' => 'hashed'];
     }
 
     public function memberships(): HasMany

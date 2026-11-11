@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AccountDeletionRequestController;
+use App\Http\Controllers\Admin\AccountDeletionRequestController as AdminAccountDeletionRequestController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\MembershipController;
@@ -17,6 +19,7 @@ Route::get('/', function (Request $request) {
 
     return view('pages.inicio');
 })->name('inicio');
+Route::view('/privacidad', 'pages.privacidad')->name('privacy.policy');
 Route::middleware('guest')->group(function () {
     Route::redirect('/nosotros', '/#nosotros')->name('nosotros');
     Route::view('/disciplinas', 'pages.disciplinas')->name('disciplinas');
@@ -32,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/deletion-request', [AccountDeletionRequestController::class, 'store'])->name('profile.deletion-request.store');
     Route::view('/dashboard', 'dashboard')->name('dashboard');
     Route::get('/mi-membresia', [MembershipController::class, 'index'])->name('mi-membresia.index');
     Route::get('/mi-membresia/crear', [MembershipController::class, 'create'])->name('mi-membresia.create');
@@ -42,6 +46,9 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'master'])->group(function () {
     Route::view('/', 'admin.dashboard')->name('dashboard');
+    Route::get('/solicitudes-privacidad', [AdminAccountDeletionRequestController::class, 'index'])->name('privacy-requests.index');
+    Route::patch('/solicitudes-privacidad/{accountDeletionRequest}', [AdminAccountDeletionRequestController::class, 'update'])->name('privacy-requests.update');
+    Route::post('/solicitudes-privacidad/{accountDeletionRequest}/anonimizar', [AdminAccountDeletionRequestController::class, 'anonymize'])->name('privacy-requests.anonymize');
     Route::resource('planes', PlanController::class)->except('show');
     Route::get('/miembros', [MemberController::class, 'index'])->name('miembros.index');
     Route::patch('/membresias/{membership}/cancelar', [MemberController::class, 'cancelMembership'])->name('membresias.cancelar');
