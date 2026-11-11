@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AccountDeletionRequest;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -75,13 +76,17 @@ test('a user cannot view another users profile photo', function () {
     $this->actingAs($otherUser)->get(route('profile.photo.show'))->assertNotFound();
 });
 
-test('deleting an account removes its profile photo', function () {
+test('anonymizing an account removes its profile photo', function () {
     Storage::fake('s3');
     $user = User::factory()->create();
     Storage::disk('s3')->put('profile-photos/private.jpg', 'private');
     $user->forceFill(['profile_photo_path' => 'profile-photos/private.jpg'])->save();
 
-    $this->actingAs($user)->delete(route('profile.destroy'), ['password' => 'password'])->assertRedirect('/');
+    $deletionRequest = AccountDeletionRequest::factory()->create(['user_id' => $user->id, 'status' => 'in_review']);
+    $master = User::factory()->create(['role' => 'master']);
+    $this->actingAs($master)->post(route('admin.privacy-requests.anonymize', $deletionRequest), [
+        'password' => 'password', 'confirm_anonymization' => '1',
+    ])->assertSessionHas('success');
 
     Storage::disk('s3')->assertMissing('profile-photos/private.jpg');
 });
